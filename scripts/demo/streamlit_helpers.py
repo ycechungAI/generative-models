@@ -1,6 +1,7 @@
 import copy
 import math
 import os
+import subprocess
 from glob import glob
 from typing import Dict, List, Optional, Tuple, Union
 
@@ -912,7 +913,9 @@ def save_video_as_grid_and_mp4(
         imageio.mimwrite(video_path, vid, fps=fps)
 
         video_path_h264 = video_path[:-4] + "_h264.mp4"
-        os.system(f"ffmpeg -i '{video_path}' -c:v libx264 '{video_path_h264}'")
+        subprocess.run(
+            ["ffmpeg", "-i", video_path, "-c:v", "libx264", video_path_h264], check=True
+        )
         with open(video_path_h264, "rb") as f:
             video_bytes = f.read()
         os.remove(video_path_h264)
